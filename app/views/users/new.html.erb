@@ -1,13 +1,46 @@
-<%= form_for(@user) do |f| %>
+<%= form_for(@user) do |user_builder| %>
   <p>
-    <%= f.label :email %>
-    <%= f.text_field :email %>  
+    <%= user_builder.label :email %>
+    <%= user_builder.text_field :email %>
   </p>
-  <%= f.submit %>
+
+  <%= user_builder.fields_for :addresses do |address_builder| %>
+  <fieldset>
+    <legend><%= address_builder.object.address_type %>Address</legend>
+    <p>
+      <%= address_builder.label :street %>
+      <%= address_builder.text_field :street %>
+      <!-- <input type="text" name="user[addresses_attributes][][street]"> -->
+    </p>
+    <p>
+      <%= address_builder.label :cross_street %>
+      <%= address_builder.text_field :cross_street %>
+      <!-- <input type="text" name="user[addresses_attributes][][cross_street]"> -->
+    </p>
+    <%= address_builder.hidden_field :address_type %>
+    <!-- <input type="hidden" name="user[addresses_attributes][][address_type]" value="Home"> -->
+  </fieldset>
+  <% end %>
+
+  <%= user_builder.fields_for :team do |team_builder| %>
+    <fieldset>
+      <legend>Team (Name required; Hometown for new teams only.)</legend>
+      <p>
+        <%= team_builder.label :name %>
+        <%= team_builder.text_field :name %>
+        <!-- <input type="text" name="user[team_attributes][][name]"> -->
+      </p>
+      <p>
+        <%= team_builder.label :hometown %>
+        <%= team_builder.text_field :hometown %>
+        <!-- <input type="text" name="user[team_attributes][][hometown]"> -->
+      </p>
+    </fieldset>
+  <% end %>
+
+  <%= user_builder.submit %>
 <% end %>
-
-
-
+ <!-- Write out the form in html before using ActionView macros -->
 
 <!-- <form>
   <p>
@@ -19,11 +52,11 @@
     <legend>Home Address</legend>
     <p>
       <label>Street:</label>
-      <input type="text" name="">
+      <input type="text" name="user[addresses_attributes][][street]">
     </p>
     <p>
       <label>Cross Street:</label>
-      <input type="text" name="">
+      <input type="text" name="user[addresses_attributes][][cross_street]">
     </p>
   </fieldset>
 
@@ -31,32 +64,11 @@
     <legend>Work Address</legend>
     <p>
       <label>Street:</label>
-      <input type="text" name="">
+      <input type="text" name="user[addresses_attributes][][street]">
     </p>
     <p>
       <label>Cross Street:</label>
-      <input type="text" name="">
+      <input type="text" name="user[addresses_attributes][][cross_street]">
     </p>
-  </fieldset>
-
-  <fieldset>
-    <legend>Existing Team</legend>
-    <p>
-      <label>Enter Team Name:</label>
-      <input type="text" name="">
-    </p>
-  </fieldset>
-
-  <fieldset>
-    <legend>Create a Team</legend>
-    <p>
-      <label>Team Name:</label>
-      <input type="text" name="">
-    </p>
-    <p>
-      <label>Hometown:</label>
-      <input type="text" name="">
-    </p>
-  </fieldset>
-  <input type="submit">
-</form> -->
+    <input type="hidden" name="user[addresses_attributes][][address_type]" value="Work">
+  </fieldset> -->

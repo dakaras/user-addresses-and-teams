@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   def new
     @user = User.new
+    @user.addresses.build(address_type: "Home")
+    @user.addresses.build(address_type: "Work")
+    @user.build_team
   end
 
   def create
@@ -15,8 +18,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find(params[:id])
+  end
+
   private
   def user_params
-    params.require(:user).permit(:email)
+    params.require(:user).permit(:email, addresses_attributes:[:street, :cross_street, :address_type], team_attributes:[:name, :hometown])
   end
 end
